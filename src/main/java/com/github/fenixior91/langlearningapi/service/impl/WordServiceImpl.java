@@ -8,6 +8,7 @@ import com.github.fenixior91.langlearningapi.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -22,7 +23,15 @@ public class WordServiceImpl implements WordService {
     }
 
     @Override
-    public List<Word> findWordsByPhrase(String phrase) {
-        return wordRepository.findWordsByPhrase(phrase);
+    public Word findWordByPhrase(String phrase) throws EntityNotFoundException
+    {
+        Word word = wordRepository.findWordByPhrase(phrase);
+        if (word == null) throw new EntityNotFoundException("Nie znaleziono słowa " + phrase + " w słowniku.");
+        return word;
+    }
+
+    @Override
+    public Word save(Word word) {
+        return wordRepository.save(word);
     }
 }

@@ -2,18 +2,13 @@ package com.github.fenixior91.langlearningapi.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.github.fenixior91.langlearningapi.enums.Language;
-import com.github.fenixior91.langlearningapi.enums.WordType;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -21,35 +16,25 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "meanings")
+@Table(name = "sentences")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
-public class Meaning implements Serializable {
+public class Sentence {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
     @Setter(AccessLevel.NONE)
     @Version
-    private Long version;
+    private Integer version;
 
-    private String phrase;
-
-    @Enumerated(value = EnumType.STRING)
-    private WordType wordType;
-
-    @Enumerated(value = EnumType.STRING)
-    private Language language;
+    private String sentence;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "word_id", nullable = false)
+    @JoinColumn(name = "meaning_id", nullable = false)
     @JsonBackReference
-    private Word word;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "meaning")
-    @JsonManagedReference
-    private List<Sentence> sentences;
+    private Meaning meaning;
 
     @Setter(AccessLevel.NONE)
     @Column(nullable = false, updatable = false)
@@ -62,14 +47,4 @@ public class Meaning implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
-
-    @Override
-    public String toString() {
-        return "Meaning{" +
-                "id=" + id +
-                ", phrase='" + phrase + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
 }

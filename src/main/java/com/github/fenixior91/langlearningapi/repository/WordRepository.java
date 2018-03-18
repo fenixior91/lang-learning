@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface WordRepository extends JpaRepository<Word, Long> {
 
+    Word findWordByPhrase(String phrase);
+
     @Query("SELECT word FROM Word AS word WHERE (:progress is null OR word.progress = :progress)" +
             "AND (:wordType IS NULL OR word.wordType = :wordType)" +
             "AND (:language IS NULL OR word.language = :language)")
@@ -21,6 +23,4 @@ public interface WordRepository extends JpaRepository<Word, Long> {
             @Param("wordType") WordType wordType,
             @Param("language") Language language
     );
-
-    List<Word> findWordsByPhrase(String phrase);
 }

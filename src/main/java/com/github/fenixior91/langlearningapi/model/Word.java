@@ -30,6 +30,10 @@ public class Word implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Setter(AccessLevel.NONE)
+    @Version
+    private Integer version;
+
     @Column(nullable = false)
     private String phrase;
 
